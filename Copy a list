@@ -1,0 +1,56 @@
+class Node:
+  def __init__(self, val, next=None):
+    self.val = val
+    self.next = next
+
+# 2 -> 4 -> 6 -> 8
+head = Node(2, Node(4, Node(6, Node(8))))
+
+
+def copyLinkedList(head):
+  copyHead = None # not using a sentinel node
+  copy = copyHead
+  curr = head
+
+  while curr:
+    if not copyHead: # make a special case for the head
+      copyHead = Node(curr.val)
+      copy = copyHead
+    else:
+      copy.next = Node(curr.val)
+      copy = copy.next
+    curr = curr.next
+
+  return copyHead
+
+
+def copyLinkedListWithSentinel(head):
+  dummy = Node(0) # using a sentinel node
+  copy = dummy
+  curr = head
+
+  while curr:
+    copy.next = Node(curr.val)
+    copy = copy.next
+    curr = curr.next
+
+  # the starting node is after the sentinel!
+  return dummy.next
+
+
+def printLL(head):
+  while head:
+    print str(head.val) + ' ->',
+    head = head.next
+  print "None"
+
+
+print "The original linked list:"
+printLL(head)
+
+print "\nCopying the list without a sentinel node:"
+printLL(copyLinkedList(head))
+
+print "\nCopying the list with a sentinel node:"
+printLL(copyLinkedListWithSentinel(head))
+
