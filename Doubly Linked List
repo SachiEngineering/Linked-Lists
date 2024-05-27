@@ -1,0 +1,46 @@
+class DLLNode:
+  def __init__(self, val, next=None, prev=None):
+    self.val = val
+    self.next = next
+    self.prev = prev
+
+dllHead = DLLNode(5)
+x2 = DLLNode(10)
+x3 = DLLNode(15)
+x4 = DLLNode(22)
+dllTail = DLLNode(20)
+
+# connecting the next pointers
+# None <- 5 -> 10 -> 15 -> 22 -> 20 -> None
+dllHead.next = x2
+x2.next = x3
+x3.next = x4
+x4.next = dllTail
+
+# connecting the prev pointers
+# None <- 5 <-> 10 <-> 15 <-> 22 <-> 20 -> None
+dllTail.prev = x4
+x4.prev = x3
+x3.prev = x2
+x2.prev = dllHead
+
+print "The doubly linked list is: 5 <-> 10 <-> 15 <-> 22 <-> 20"
+
+def printLinkedList(head):
+  while head:
+    print str(head.val) + " -> ",
+    head = head.next
+  print "None"
+
+print "\nIterating through the list using next pointers:\n",
+printLinkedList(dllHead)
+
+def printLinkedListBackwards(tail):
+  while tail:
+    print str(tail.val) + " -> ",
+    tail = tail.prev
+  print "None"
+
+print "\nIterating through the list using prev pointers:\n",
+printLinkedListBackwards(dllTail)
+
