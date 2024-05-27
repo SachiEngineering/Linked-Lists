@@ -1,0 +1,20 @@
+class Node:
+  def __init__(self, val, next=None):
+    self.val = val
+    self.next = next
+
+# 2 -> 4 -> 6 -> 8
+head = Node(2, Node(4, Node(6, Node(8))))
+
+def doNothing(head):
+  sentinel = Node(-9999)
+  sentinel.next = head
+  # -9999 -> 2 -> 4 -> 6 -> 8
+
+  # returns the node with the value 2
+  return sentinel.next
+
+print "The value at head is " + str(head.val)
+nodePointer = doNothing(head)
+print "The value at nodePointer is " + str(nodePointer.val)
+
