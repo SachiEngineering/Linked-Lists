@@ -1,0 +1,194 @@
+#######################################################################
+# Creating Nodes
+# A linked list describes a chain of nodes. Each node in a linked list contains two things: a value and a pointer to the next node in the list. In this section, we’ll learn how to create the class, creating instances of the class and link them together to form a list. We’ll also learn about the difference between a node and a value.
+
+# Creating the Node Class#############################################
+
+class ListNode(object):
+  def __init__(self, x):
+    self.value = x
+    self.next = None
+
+#Creating a linked list###############################################
+#Once you have the class, you’re able to start creating nodes and linking them together.
+
+    node1 = ListNode(1)
+    node2 = ListNode(2)
+
+#In the code above, we’ve created two nodes. To connect them, you will need to set the next pointers:
+
+    node1.next = node2
+
+#You could have also done this to create the same list:
+# node1 = ListNode(1)
+# node1.next = ListNode(2)
+# By doing it this way, we don’t have a direct pointer to the second node, but you can always access it using node1.next .
+
+#Which of the below is correct in creating a list of three nodes?
+# A.
+# node1 = ListNode(1)
+# node2 = ListNode(2)
+# node2.next = ListNode(3)
+# node1.next = node2
+
+# B.
+# node1 = ListNode(1)
+# node2 = ListNode(2)
+# node3 = ListNode(3)
+
+# C.
+# node1 = ListNode(1)
+# node1.next = ListNode(2)
+# node1.next = ListNode(3)
+
+#   The answer is A. 
+
+#   B is creating 3 nodes but are not linking them together
+
+#   C is creating 1 node and connecting it to the next node, but then the third node is overwriting the second node, so we end up with a list of length 2
+
+#Shortcut to creating list faster #####################################
+class ListNode(object):
+  def __init__(self, x, next = None):
+    self.value = x
+    self.next = next
+
+#The difference here is that we are adding an additional parameter to the initializer that allows us to create the next node in line. This will allow us to create new linked lists much faster. Let’s see how this looks:
+
+node = ListNode(1, ListNode(2, ListNode(3)))
+
+#Note that since you only have a pointer to the first node in the list, you will have to use the next pointers to access later nodes, like node.next and node.next.next 
+
+#Nodes vs Values #####################################################
+# It’s important to understand that the node is a wrapper around its values. Why is this important?
+
+# * Sometimes, a problem might ask you to return a node, and sometimes, you might need to return a value. You must know which one so that you can return the correct type.
+# * When you have a reference to a node object, you can traverse through the linked list, but if only get the value, you can not access the next pointer
+# * You will often times need to perform operations on the values of a linked list (for example, finding the sum of all values), and these operations (typically) don’t work on the nodes themselves (it does not make sense to add two nodes, for example).
+
+node1 = ListNode(1)
+node2 = ListNode(2)
+node1.next = node2
+
+sum = node1.value + node2.value # this is correct
+#sum = node1 + node2 # this is incorrect, we cannot add two nodes
+
+#Sometimes, we don’t have a pointer to a node directly, we may need to access a node via a next pointer. For example, let’s try to get the second value out of a three node list:
+
+node = ListNode(1, ListNode(2, ListNode(3)))
+print(node.next.value)
+
+#######################################################################
+# Working with Pointers
+# Linked lists are a good computer science fundamentals practice because while simple, they are a focused way to practice with manipulating pointers. In this section, we’ll explore storing extra references to nodes and doing some basic manipulation of the lists.
+
+#Using a curr Pointer##################################################
+#Oftentimes, we will be creating additional pointers to refer to our nodes. For example:
+
+node = ListNode(1, ListNode(2, ListNode(3)))
+curr = node
+
+#Why might we want to do this? Well, we might want to store a pointer to the head of the list (currently node), while using another variable (like curr) to iterate / move through the list. To move curr through the list, you can repeatedly move it to curr.next, like this:
+
+curr = curr.next
+
+#This starts introducing some tricky situations. Let’s look at a couple examples. Let’s say we add this line:
+
+curr.value = 5
+
+#After the above line, what do you think node.value is?
+
+# It will still be 1. After the above lines of code, the entire linked list will look like this: 
+# 1 → 5 → 3
+
+# First we are moving curr to the next node in the list. Then, we’re setting the value of that node (the second node) to 5. However, the pointer node was never moved, so it is still referring to the first node in the list.
+
+# !! Very important !!
+
+# When moving curr through the list, we need to get the assignment order right. curr = curr.next is completely different from curr.next = curr. 
+
+# Let’s take a moment to understand what curr.next = curr is doing. Remember we are assigning what’s on the right side into the left side. On the left side, we are looking at the next pointer, which means that we are trying to change what curr ‘s next pointer points to. And what are we going to point it to? We are having it point to curr itself! This means we’ve accidentally created a cycle with curr just pointing to itself. This is a very big mistake!
+
+#Using a next pointer ################################################
+# One of the tricky things with linked lists is simply not losing track of your nodes. As we’re modifying and changing around pointers, we often need to store pointers to nodes that we are temporarily disconnecting so that we can still find it.
+
+# For example, let’s say we’re adding a new node with value 3  into linked list 1 → 2 to become 1 → 3 → 2 . The original list is set up like this:
+
+node = ListNode(1, ListNode(2))
+
+#If we try to set the next node like this:
+
+node.next = ListNode(3)
+
+#Now, we’ve lost the pointer to the node with value 2, so we cannot reattach it after the 3 node. One way to fix this is to store a temporary pointer to the next node before overwriting it:
+
+next = node.next
+node.next = ListNode(3)
+node.next.next = next
+
+#In this code, we are first creating a new variable next that remembers the second node while we write in a new node into that list. Note that next by itself is just a normal variable, which is completely different than calling .next on a node like node.next. To make this more clear, we can name this next variable any name, like this:
+
+b = node.next
+node.next = ListNode(3)
+node.next.next = b
+
+#However, most engineers probably prefer the more descriptive next variable name.
+
+#Practice with curr and next pointers
+#Let’s say we are trying to swap the last two nodes in the linked list 1 → 2 → 3 to be 1 → 3 → 2 instead. Which code block does this successfully?
+# A.
+# let node = new ListNode(1, new ListNode(2, new ListNode(3)))
+# let curr = node.next
+# let next = curr.next
+# curr = next.next
+# curr.next = null
+# node.next = next
+
+# B.
+# let node = new ListNode(1, new ListNode(2, new ListNode(3)))
+# let curr = node.next
+# let next = curr.next
+# next.next = curr
+# curr.next = null
+# node.next = next
+
+#   The answer is B. 
+
+#   The first problem on line A is that on line 4, we have the equation flipped. We’re changing the curr pointer to next.next, which is currently null, which means curr ends up getting set to null. We should have flipped this equation to next.next = curr , which means that we’re changing the next.next point to curr (making 3 point to 2)
+
+#Removing a node #######################################################
+#Sometimes we want to remove a node from a list. To do this, we need to have the node’s next pointer skip to the node after, like this:
+
+node = ListNode(1, ListNode(2, ListNode(3)))
+node.next = node.next.next
+
+#One of the tricky pieces about removing a node is we always need a pointer to the PREVIOUS pointer in the list. For example, let’s say we have a long list like this and a curr pointer:
+
+node = ListNode(1, ListNode(2, ListNode(3, ListNode(4, ListNode(5, ListNode(6))))))
+curr = node.next.next.next
+
+#Here, if we want to remove curr, we actually need a pointer to the previous pointer in the list. Later, when we learn to iterate through a list, we will see how we always need to keep track of the previous node so that we can actually remove the node.
+
+# Swapping a node
+# Now, let’s step up the difficulty. What we’re trying to do here is to swap the first two nodes in this list:
+
+# 1 → 2 → 3 to become 2 → 1 → 3 . Note that we want to do this by swapping the actual nodes, and not “cheating” by just overwriting the values. A number of changes need to happen here:
+
+# * 1’s next pointer needs to point to 3 instead
+# * 2’s next pointer needs to point to 1 instead
+
+node = ListNode(1, ListNode(2, ListNode(3)))
+twoNode = node.next
+node.next = node.next.next
+twoNode.next = node
+
+#Here, we are first storing a reference to the 2 node so that when we point 1’s next pointer to the 3 node, we are not losing the pointer to two. Then, the first change, we then point the 2 node to the 1 node. Note that from here on, we’ll need to use the variable twoNode instead of node to refer to the head of the list.
+
+# Practice with cycling a node
+# Let’s say we’re trying to move the last node in the list 1 → 2 → 3 to the beginning. The final expected result is 3 → 1 → 2 . What is wrong with the following code?
+
+node = ListNode(1, ListNode(2, ListNode(3)))
+lastNode = node.next.next
+lastNode.next = node
+
+#  Here, we’re correctly finding the last node and storing it into the variable lastNode. We’re also correctly setting lastNode ‘s next pointer to the first node. However, we’re forgetting to set the 2 node’s next pointer to null, which means that it is still pointing to the 3 node. This means that we’ve accidentally created a cycle in our list. To fix this, we just need to add node.next.next = null (or None) to the end of this.
