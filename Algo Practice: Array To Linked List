@@ -1,0 +1,80 @@
+'''
+❓ PROMPT
+Given an array containing numbers, convert this to a singly linked list and return the head of the list.
+
+Example(s)
+arrayToLL([1,2]) == "1 -> 2"
+arrayToLL([1,2,3]) == "1 -> 2 -> 3"
+ 
+
+🔎 EXPLORE
+List your assumptions & discoveries:
+You can get an empty arr
+
+Insightful & revealing test cases:
+ 
+
+🧠 BRAINSTORM
+What approaches could work?
+Algorithm 1:
+Time: O(n)
+Space: O(n)
+ 
+
+📆 PLAN
+Outline of algorithm #: 
+-Create a dummy/sentinel node in a variable, 
+-and also a curr variable set to the same place. 
+-Iterate through the array creating new nodes and updating curr to always point to the most recently created node. 
+-At the end, return dummy.next to be the head.
+
+🛠️ IMPLEMENT
+function arrayToLL(array) {
+def arrayToLL(array: list[int]) -> Node:
+ 
+
+🧪 VERIFY
+Run tests. Methodically debug & analyze issues.
+
+'''
+
+
+#
+# A class definition of a Node. It's made recursive based
+# on the object provided in the .next class variable
+#
+class Node:
+  def __init__(self, val, next = None):
+    self.val = val
+    self.next = next
+
+def arrayToLL(array: list[int]) -> Node:
+  sentinel = Node(0)
+
+  curr = sentinel
+  for i in range(len(array)):
+    curr.next = Node(array[i])
+    curr = curr.next
+
+  return sentinel.next
+
+
+# Verify
+def toString(head: Node) -> None:
+  if not head:
+    return "<empty>"
+
+  parts = []
+  while head:
+    parts.append(str(head.val))
+    head = head.next
+
+  return " -> ".join(parts)
+
+print(toString(arrayToLL([])) == "<empty>")
+print(toString(arrayToLL([1])) == "1")
+print(toString(arrayToLL([1,2])) == "1 -> 2")
+print(toString(arrayToLL([1,2,3])) == "1 -> 2 -> 3")
+print(toString(arrayToLL([5,0,3])) == "5 -> 0 -> 3")
+print(toString(arrayToLL([8,7,8,8])) == "8 -> 7 -> 8 -> 8")
+print(toString(arrayToLL([8,7,8,8,7])) == "8 -> 7 -> 8 -> 8 -> 7")
