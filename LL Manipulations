@@ -1,0 +1,93 @@
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+#point the tail to the head
+def createCycle(head):
+    if not head or not head.next:
+        #if head is none or head does not have next node(last node). empty or single node list
+        return head #no need to make a cycle
+    
+    # Find the tail node
+    tail = head
+    while tail.next: #start at head and go until next pointer is none
+        tail = tail.next
+    
+    #once there is no more tail.next...
+    # Point the tail to the head to create a cycle
+    tail.next = head
+    return head
+
+#multiply the value in each node by the value in the next node. The tail node has no next node so multiply it by itself.
+def multiplyNext(head):
+    current = head
+    while current and current.next:
+        #while either current node and next node are not none
+        current.val *= current.next.val
+        current = current.next
+
+    # Multiply the tail node by itself if it exists
+    if current:
+        current.val *= current.val
+    return head
+
+#remove every other node, skipping the head. The first node to be removed should be after the head.
+def removeEveryOther(head):
+    current = head
+
+    while current and current.next:
+        #while current and next node exist
+
+        current.next = current.next.next #set next pointer to skip over the next ndoe, removing it from list
+
+        current = current.next
+    return head
+
+#move the values left without altering next pointers. The head's value should become the tail's new value.
+def rotateValuesLeft(head):
+    if not head or not head.next: #empty or single node
+        return head
+    
+    # Find the last node
+    tail = head
+    while tail.next:
+        tail = tail.next
+    
+    # Set the last node's value to be the head's value
+    tail.val = head.val
+    
+    # Shift values left
+    current = head
+    while current.next:
+        current.val = current.next.val
+        current = current.next
+    
+    # # Remove the last node to prevent cycles
+    # current = head
+    # while current.next.next:
+    #     current = current.next
+    # current.next = None
+    
+    return head
+
+#find the node 3/4ths length through the linked list. How can this be solved with 1 pass without a length variable?
+def findThirdQuarterNode(head):
+    if not head: #empty head
+        return None
+    
+    slow = head #move one pointer ahead
+    fast = head # will move 2 nodes ahead
+    
+    # Move fast pointer 3/4 of the way through the list
+    while fast and fast.next and fast.next.next and fast.next.next.next:
+        #stops when the fast pointer reaches the end of the list or node after the last node (to handle lists not divisible by 4
+        
+        #
+
+        slow = slow.next.next
+        fast = fast.next.next.next
+    
+    return slow
+
+
