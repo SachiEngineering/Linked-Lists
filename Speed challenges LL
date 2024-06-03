@@ -1,0 +1,147 @@
+# Implement the following algorithm to merge two sorted linked lists iteratively and to pass the test suite.
+# Initialize a dummy node
+# Initialize a current pointer to the sentinel node
+# Iterate while both head1 and head2 exist and for each node
+# If head1 value is less than head2 value, set current.next = head1 and head1 = head1.next
+# Otherwise, set current.next = head2 and head2 = head2.next
+# Always increment current to current.next
+# After the iteration, set current.next to whichever head still exists to pick up the remaining nodes
+# Return dummy.next as the new list's head
+
+def solution(head1, head2):
+    dummy = ListNode(0) #sentinel node with arbitrary value
+    current = dummy
+   
+    while head1 and head2:
+        if head1.value < head2.value:
+            current.next = head1
+            head1 = head1.next
+        else:
+            current.next = head2
+            head2 = head2.next
+           
+        current = current.next
+       
+    if head1:
+        current.next = head1
+    else:
+            current.next = head2
+      
+    return dummy.next
+
+
+# Implement the following algorithm to pass the test suite.
+# Initialize a current variable to the head
+# Initialize a future variable to the node after head
+# While future exists
+# If the current's value is equal to the future's value, update current's next ptr to future's next ptr
+# Otherwise, update current to future
+# Advance the future ptr
+# Return head
+# [execution time limit] 4 seconds (py3)
+# [memory limit] 1 GB
+# [input] linkedlist.integer head
+# [output] linkedlist.integer
+
+def solution(head):
+    current = head
+   
+    future = head.next
+   
+    while future:
+        if current.value == future.value:
+            current.next = future.next
+        else:
+            current = future
+        future = future.next
+    return head
+
+# Implement the following algorithm to iteratively reverse a linked list and to pass the test suite.
+# Initialize a prev pointer variable to null
+# Initialize a current pointer variable to head
+# While current exists
+# Initialize a future pointer variable to the node after current
+# Point current's next to prev
+# Set prev to current
+# Set current to future
+# Return prev
+# [execution time limit] 4 seconds (py3)
+# [memory limit] 1 GB
+# [input] linkedlist.integer head
+# [output] linkedlist.integer
+
+def solution(head):
+    prev = None
+   
+    current = head
+   
+    while current:
+        future = current.next #store the address of the next node for future ref
+        current.next = prev #reverse the link
+        prev = current #shift to right
+        current = future #shift to right
+    return prev #has the address of the last node, which is the new “head”
+
+# Implement the following algorithm to recursively reverse a linked list and to pass the test suite.
+# The base case is if the head node is None or the subsequent node is None.
+# If either of these conditions are true, return the head node.
+# The recursive case is to recursively call itself on the subsequent node and assign the result to a reversed_head variable.
+# Point the subsequent node's next to the current head
+# Set the current head's next attribute to null
+# Return the reversed_head
+# [execution time limit] 4 seconds (py3)
+# [memory limit] 1 GB
+# [input] linkedlist.integer head
+# [output] linkedlist.integer
+
+def solution(head):
+    if head == None or head.next == None:
+        return head
+   
+    reversed_head = solution(head.next)
+   
+    head.next.next = head
+    head.next = None
+    return reversed_head
+
+# Implement the following algorithm to check if a linked list is a palindrome and to pass the test suite.
+# Initialize a slow pointer to the head
+# Initialize a fast pointer to the head
+# Initialize an empty stack
+# While fast and its next node both exist
+# Push the value of slow onto the stack
+# Advance the slow ptr
+# Advance the fast twice
+# If fast exists (the list is an odd length), advance the slow ptr
+# While slow exists
+# If slow's value is not equal to the top element in the stack, return false
+# Advance the slow ptr
+# It's a palindrome so return true
+# [execution time limit] 4 seconds (py3)
+# [memory limit] 1 GB
+# [input] linkedlist.integer head
+# [output] boolean
+
+def solution(head):
+    slow = head
+    fast = head
+   
+    stack = []
+   
+    while fast and fast.next:
+        stack.append(slow.value)
+        slow = slow.next
+        fast = fast.next.next
+       
+    if fast:
+        slow = slow.next
+       
+    while slow:
+        if slow.value != stack.pop():
+            return False
+        slow = slow.next
+       
+    return True
+
+
+
